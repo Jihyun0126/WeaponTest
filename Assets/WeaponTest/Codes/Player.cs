@@ -55,20 +55,23 @@ public class Player : MonoBehaviour
     void LateUpdate()
     {
         anim.SetFloat("Speed", inputVec.magnitude);
+
+        if (inputVec.x != 0) // inputVec.x 값이 0보다 큰 경우
+        {
+            if(inputVec.x < 0)
+            {
+                transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+        }
     }
 
     void OnDrawGizmos() //영역설정
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(pos.position, boxSize);
-
-        if (inputVec.x != 0) // inputVec.x 값이 0보다 큰 경우
-        {
-            transform.localScale = new Vector3(-1, 1, 1); // 원래대로 돌아가게 설정
-        }
-        else
-        {
-            transform.localScale = new Vector3(-1, 1, 1); // 뒤집힌 상태로 유지
-        }
     }
 }
