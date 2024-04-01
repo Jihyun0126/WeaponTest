@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class Player : MonoBehaviour
     public Transform pos;
     public Vector2 boxSize;
     public float curTime;
-    public float coolTime = 3f;
+    public float coolTime = 0.5f;
 
     Rigidbody2D rigid;
     SpriteRenderer spriter;
@@ -28,7 +29,6 @@ public class Player : MonoBehaviour
     {
         inputVec.x = Input.GetAxisRaw("Horizontal");
         inputVec.y = Input.GetAxisRaw("Vertical");
-
         if (curTime <= 0)
         {
             Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
             }
             anim.SetTrigger("atk");
             curTime = coolTime; // 쿨다운을 다시 설정
+            
         }
         else
         {
@@ -53,17 +54,21 @@ public class Player : MonoBehaviour
 
     void LateUpdate()
     {
-        anim.SetFloat("Speed",inputVec.magnitude);
-
-        if (inputVec.x != 0)
-        {
-            spriter.flipX = inputVec.x < 0;
-        }
+        anim.SetFloat("Speed", inputVec.magnitude);
     }
 
-    private void OnDrawGizmos()
+    void OnDrawGizmos() //영역설정
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(pos.position, boxSize);
+
+        if (inputVec.x != 0) // inputVec.x 값이 0보다 큰 경우
+        {
+            transform.localScale = new Vector3(-1, 1, 1); // 원래대로 돌아가게 설정
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1); // 뒤집힌 상태로 유지
+        }
     }
 }
